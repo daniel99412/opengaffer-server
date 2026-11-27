@@ -21,6 +21,7 @@ la base de Sports Interactive.
 9. [`08-legal.md`](08-legal.md) — marcas, copyright, datos y checklist.
 10. [`09-piramide-mexico.md`](09-piramide-mexico.md) — organigrama completo de México
     (Liga MX, Sub-21/Sub-19, Expansión, Femenil, Premier, TDP).
+11. [`protocol/v0.md`](protocol/v0.md) — contrato JSON entre cliente y servidor.
 
 ## Reglas de la casa
 
