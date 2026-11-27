@@ -100,6 +100,7 @@ order (currently in Spanish):
 8. [`07-roadmap.md`](docs/07-roadmap.md) — milestones and Definition of Done.
 9. [`08-legal.md`](docs/08-legal.md) — trademarks, copyright and data.
 10. [`09-piramide-mexico.md`](docs/09-piramide-mexico.md) — Mexican football pyramid.
+11. [`protocol/v0.md`](docs/protocol/v0.md) — wire protocol v0.
 
 ## Principles
 
