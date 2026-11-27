@@ -1,119 +1,120 @@
 # OpenGaffer — Server
 
-Servidor autoritativo de **OpenGaffer**, un simulador de gestión de fútbol
-_open source_, multijugador y con datos propios. El objetivo a largo plazo es
-construir un juego que pueda competir con Football Manager sin depender de la
-base de datos ni de los assets de Sports Interactive.
+Authoritative server for **OpenGaffer**, an open-source, multiplayer football
+management simulator built on its own data. The long-term goal is a game that
+can compete with Football Manager without depending on Sports Interactive's
+database or assets.
 
-Este repositorio contiene **solo el servidor**: motor de partido, estado del
-mundo, catálogo de datos y la capa de red. El cliente vive en su propio
-repositorio (`opengaffer-client`).
+This repository contains **the server only**: match engine, world state,
+catalog and the network layer. The client lives in its own repository
+(`opengaffer-client`).
 
-## Estado
+## Status
 
-**Esqueleto inicial (M0).** Todavía no hay lógica de juego. El único binario
-existe para validar que el workspace compila y corre:
+**Initial skeleton (M0).** There is no game logic yet. The only binary exists
+to validate that the workspace builds and runs:
 
 ```bash
 cargo run -p gaffer-server
 # Hello, OpenGaffer!
 ```
 
-## Arquitectura
+## Architecture
 
 ```
 ┌─────────────┐        WSS/JSON        ┌──────────────────────┐
-│  Cliente    │ ─────────────────────► │  gaffer-server       │
+│   Client    │ ─────────────────────► │  gaffer-server       │
 │  (TUI/Web)  │ ◄───────────────────── │  auth · lobby · sync │
-└─────────────┘   snapshots/eventos    └──────────┬───────────┘
-                                                   │ comandos
+└─────────────┘   snapshots/events     └──────────┬───────────┘
+                                                   │ commands
                                         ┌──────────▼───────────┐
                                         │  gaffer-state        │
-                                        │  mundo · journal     │
+                                        │  world · journal     │
                                         │  snapshots · audit   │
                                         └──────────┬───────────┘
-                                                   │ simula
+                                                   │ simulates
                                         ┌──────────▼───────────┐
                                         │  gaffer-sim          │
-                                        │  motor de partido    │
+                                        │  match engine        │
                                         └──────────────────────┘
 ```
 
-| crate | responsabilidad | no hace |
+| crate | responsibility | does not |
 |---|---|---|
-| `gaffer-core` | tipos compartidos, IDs, protocolo | IO, red, DB |
-| `gaffer-sim` | motor de partido determinista | DB, red, reloj |
-| `gaffer-state` | mundo, comandos, eventos, journal, snapshots | red |
-| `gaffer-catalog` | ingesta, normalización, ratings, data packs | red en runtime |
-| `gaffer-server` | transporte, sesiones, actores, auth | fórmulas de simulación |
+| `gaffer-core` | shared types, IDs, protocol | IO, network, DB |
+| `gaffer-sim` | deterministic match engine | DB, network, clock |
+| `gaffer-state` | world, commands, events, journal, snapshots | network |
+| `gaffer-catalog` | ingestion, normalization, ratings, data packs | network at runtime |
+| `gaffer-server` | transport, sessions, actors, auth | simulation formulas |
 
-## Requisitos
+## Requirements
 
-- Rust estable con soporte para **edition 2024** (1.85 o superior).
-- No se necesita base de datos para el esqueleto actual.
+- Stable Rust with **edition 2024** support (1.85 or newer).
+- No database is needed for the current skeleton.
 
-## Cómo correr
+## Running
 
 ```bash
-# Compilar todo el workspace
+# Build the whole workspace
 cargo build --workspace
 
-# Levantar el servidor
+# Start the server
 cargo run -p gaffer-server
 
-# Pruebas
+# Tests
 cargo test --workspace
 
-# Formato y lints
+# Formatting and lints
 cargo fmt --all --check
 cargo clippy --workspace --all-targets -- -D warnings
 ```
 
-## Estructura del repositorio
+## Repository layout
 
 ```
 opengaffer-server/
 ├── Cargo.toml                  # workspace
 ├── Cargo.lock
 ├── crates/
-│   ├── gaffer-core/            # tipos y protocolo
-│   ├── gaffer-sim/             # motor de partido
-│   ├── gaffer-state/           # mundo + persistencia
-│   ├── gaffer-catalog/         # ingesta + ratings + data packs
-│   └── gaffer-server/          # binario del servidor
-├── catalog/                    # data packs y manifests
-└── docs/                       # documentación de diseño
+│   ├── gaffer-core/            # types and protocol
+│   ├── gaffer-sim/             # match engine
+│   ├── gaffer-state/           # world + persistence
+│   ├── gaffer-catalog/         # ingestion + ratings + data packs
+│   └── gaffer-server/          # server binary
+├── catalog/                    # data packs and manifests
+└── docs/                       # design documentation
 ```
 
-## Documentación
+## Documentation
 
-La documentación de diseño vive en [`docs/`](docs/README.md). Orden sugerido:
+Design documentation lives in [`docs/`](docs/README.md). Suggested reading
+order (currently in Spanish):
 
-1. [`00-vision.md`](docs/00-vision.md) — qué es OpenGaffer y qué no.
-2. [`01-arquitectura.md`](docs/01-arquitectura.md) — componentes y stack.
-3. [`02-modelo-datos.md`](docs/02-modelo-datos.md) — catálogo vs mundo.
-4. [`03-rating-global.md`](docs/03-rating-global.md) — cálculo de stats.
-5. [`04-fuentes-datos.md`](docs/04-fuentes-datos.md) — fuentes y licencias.
-6. [`05-multijugador.md`](docs/05-multijugador.md) — mundos, asientos, sync.
-7. [`06-aprendizajes-fm.md`](docs/06-aprendizajes-fm.md) — notas técnicas de FM24.
-8. [`07-roadmap.md`](docs/07-roadmap.md) — milestones y DoD.
-9. [`08-legal.md`](docs/08-legal.md) — marcas, copyright y datos.
-10. [`09-piramide-mexico.md`](docs/09-piramide-mexico.md) — pirámide mexicana.
+1. [`00-vision.md`](docs/00-vision.md) — what OpenGaffer is and is not.
+2. [`01-arquitectura.md`](docs/01-arquitectura.md) — components and stack.
+3. [`02-modelo-datos.md`](docs/02-modelo-datos.md) — catalog vs world.
+4. [`03-rating-global.md`](docs/03-rating-global.md) — stat calculation.
+5. [`04-fuentes-datos.md`](docs/04-fuentes-datos.md) — data sources and licenses.
+6. [`05-multijugador.md`](docs/05-multijugador.md) — worlds, seats, sync.
+7. [`06-aprendizajes-fm.md`](docs/06-aprendizajes-fm.md) — FM24 technical notes.
+8. [`07-roadmap.md`](docs/07-roadmap.md) — milestones and Definition of Done.
+9. [`08-legal.md`](docs/08-legal.md) — trademarks, copyright and data.
+10. [`09-piramide-mexico.md`](docs/09-piramide-mexico.md) — Mexican football pyramid.
 
-## Principios
+## Principles
 
-- **El servidor es la autoridad.** El cliente manda intents; no simula estado.
-- **Determinismo.** Misma semilla y mismas entradas producen el mismo resultado.
-- **Todo cambio es auditable.** `command_id`, `seq`, journal y snapshots.
-- **Procedencia de datos.** Cada dato tiene fuente, licencia, método y confianza.
-- **Sin datos ni assets de Sports Interactive.** El save de FM del usuario se
-  importa localmente y nunca se redistribuye.
+- **The server is authoritative.** Clients send intents; they never simulate state.
+- **Determinism.** Same seed and same inputs produce the same result.
+- **Every change is auditable.** `command_id`, `seq`, journal and snapshots.
+- **Data provenance.** Every value carries source, license, method and confidence.
+- **No Sports Interactive data or assets.** A user's FM save is imported locally
+  and never redistributed.
 
 ## Roadmap
 
-El plan por milestones está en [`docs/07-roadmap.md`](docs/07-roadmap.md).
-Actualmente en **M0: repo y esqueleto**.
+The milestone plan lives in [`docs/07-roadmap.md`](docs/07-roadmap.md).
+Currently at **M0: repository and skeleton**.
 
-## Licencia
+## License
 
-Por definir antes de publicar.
+To be defined before publishing.
