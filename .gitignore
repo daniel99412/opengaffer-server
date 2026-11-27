@@ -1,0 +1,117 @@
+# ─────────────────────────────────────────────────────────────
+# OpenGaffer — .gitignore
+# Regla de oro: nunca versionar datos de Sports Interactive,
+# saves de FM del usuario, mundos locales ni binarios grandes.
+# ─────────────────────────────────────────────────────────────
+
+# ── Sistema operativo / editor ───────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+desktop.ini
+*~
+*.swp
+*.swo
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# ── Variables de entorno y secretos ──────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets/
+credentials/
+
+# ── Rust (gaffer-sim, gaffer-state, gaffer-server, gaffer-core) ──
+target/
+**/target/
+*.rs.bk
+*.profraw
+*.profdata
+perf.data*
+incremental/
+
+# ── Mundos, journal y snapshots locales ──────────────────────
+# Cada mundo es su propia DB; los snapshots/journal son estado
+# en runtime, no fuente.
+worlds/
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+*.sqlite
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+journal/
+snapshots/
+*.snapshot
+*.journal
+*.wal
+*.zst
+
+# ── Saves e importaciones de Football Manager (NO redistribuir) ──
+# Propiedad del usuario. El adaptador debe leerlos en su máquina
+# y generar solo un data pack privado.
+*.fm
+*.fm.save
+game_db.dat
+client_db.dat
+server_db.dat
+lang_db.dat
+lang_update_db.dat
+comp_*.dat
+fix_man.dat
+comp_man.dat
+fm.db
+**/fm-save/
+**/fm_saves/
+
+# ── Datos crudos de ingesta y data packs ─────────────────────
+# El crudo de fuentes (Wikidata, FBref, etc.) se re-descarga,
+# no se commitea. Los data packs grandes se publican aparte con
+# checksum/manifest; el manifest.json sí se versiona.
+data/raw/
+data/cache/
+data/tmp/
+data/interim/
+catalog/build/
+catalog/dist/
+catalog/*/ratings.bin
+catalog/*/*.parquet
+catalog/*/*.csv.gz
+catalog/*/*.tar.gz
+catalog/*/*.zip
+*.pack
+
+# ── Logs y temporales ────────────────────────────────────────
+logs/
+*.log
+tmp/
+temp/
+.cache/
+*.tmp
+*.bak
+*.orig
+*.rej
+
+# ── Resultados de simulación y calibración ───────────────────
+# Salidas de "correr gaffer-sim en lote para calibrar".
+sim-out/
+sim_out/
+calibration/out/
+bench-out/
+*.golden.tmp
+
+# ── CodeGraph (índice local, no compartir) ───────────────────
+.codegraph/
+
+# ── OpenCode / agentes ───────────────────────────────────────
+.opencode/
