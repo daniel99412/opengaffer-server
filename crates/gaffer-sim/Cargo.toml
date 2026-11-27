@@ -1,0 +1,4 @@
+[package]
+name = "gaffer-sim"
+version.workspace = true
+edition.workspace = true

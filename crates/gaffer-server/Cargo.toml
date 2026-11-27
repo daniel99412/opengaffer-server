@@ -1,0 +1,4 @@
+[package]
+name = "gaffer-server"
+version.workspace = true
+edition.workspace = true

@@ -1,0 +1,4 @@
+[package]
+name = "gaffer-state"
+version.workspace = true
+edition.workspace = true

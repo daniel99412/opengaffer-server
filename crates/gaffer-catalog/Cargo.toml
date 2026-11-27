@@ -1,0 +1,4 @@
+[package]
+name = "gaffer-catalog"
+version.workspace = true
+edition.workspace = true
